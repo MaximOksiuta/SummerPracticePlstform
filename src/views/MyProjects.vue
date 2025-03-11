@@ -27,7 +27,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <input class="form-control" type="search" placeholder="Поиск по названию" style="max-width: 500px;">
                 <router-link :to="{ name: 'newProject' }"
-                class="ms-5 none-deco default-text-color font-semibold text-xl cursor-pointer">Доска проектов</router-link>
+                class="ms-5 none-deco title-color font-regular text-s cursor-pointer">Создать новый проект</router-link>
             
                 
             </div>

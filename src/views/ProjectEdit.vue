@@ -6,13 +6,24 @@
     import EditableArgument from '@/components/EditableArgument.vue';
     import { userRole } from '@/main.js';
 
-    const roles = ref([
-        "Lorem ipsum dolor",
-        "Lorem ipsum odor amet",
-        "Lorem ipsum",
-        "Lorem",
-        "Lorem ipsum odor amet"
+    const name = ref("");
+    const category = ref("");
+
+    const description = ref("");
+
+    const partner = ref("");
+
+    const author = ref("");
+
+    const contact = ref("");
+
+    const curator = ref("");
+
+    var roles = ref([
+        ""
     ]);
+
+    
 </script>
 
 <template>
@@ -29,16 +40,24 @@
 
             <div class="two-columns">
                 <div class="column">
-                    <editable-argument param_name="Название проекта" param_value="Некоторое очень крутое название" />
 
-                    <editable-argument large="true" param_name="Описание"
-                        param_value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." />
+                    <editable-argument param_name="Название" v-model="name" />
+
+                    <editable-argument param_name="Категория" v-model="category" />
+
+                    <editable-argument large="true" param_name="Описание" v-model="description" />
                 </div>
 
                 <div class="column">
-                    <editable-argument param_name="Партнеры проекта" param_value="- Sitronics-kt" />
+                    <editable-argument param_name="Партнер" param_value="" v-model="partner" />
 
-                    <editable-argument param_name="Необходимые роли" :param_value="roles" />
+                    <editable-argument param_name="Автор" param_value="" v-model="author"/>
+
+                    <editable-argument param_name="Контактное лицо" param_value="" v-model="contact"/>
+
+                    <editable-argument param_name="Куратор" param_value="" v-model="curator"/>
+
+                    <editable-argument param_name="Необходимые роли" v-model="roles"/>
                 </div>
             </div>
 

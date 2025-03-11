@@ -10,14 +10,17 @@ import MyApplicationsView from './views/MyApplications.vue';
 import ProjectEditView from './views/ProjectEdit.vue'
 import ProjectView from './views/ProjectView.vue';
 import MyProjects from './views/MyProjects.vue';
+import CreateNewProject from './views/CreateNewProject.vue';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 // import "https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/cjs/popper.min.js"
 
 const { sendRequest, isLoading, error } = useApi();
 
-export var userRole = ref(-1);
-
+export const userRole = ref(-1);
+export const all_categories = ref([]);
+export const all_companies = ref([]);
+export const all_specialities = ref([]);
 async function updateUserState () {
   try {
     const result = sendRequest(
@@ -29,11 +32,51 @@ async function updateUserState () {
       userRole.value = response.role.id;
     })
   } catch {
-      // Обработка ошибки
+      console.log(error)
   } finally {
     return true
   }
 }
+
+async function updateLists() {
+  try {
+      const result = await sendRequest(
+          'GET',
+          '/projects/categories'
+      );
+      console.log('Data saved:', result);
+      
+      all_categories.value = [...result];
+  } catch {
+      console.log(error)
+  }
+
+  try {
+    const result = await sendRequest(
+        'GET',
+        '/projects/specialities'
+    );
+    console.log('Data saved:', result);
+    
+    all_specialities.value = [...result];
+  } catch {
+      result
+  }
+
+  try {
+    const result = await sendRequest(
+        'GET',
+        '/projects/companies'
+    );
+    console.log('Data saved:', result);
+    
+    all_companies.value = [...result];
+} catch {
+    result
+}
+};
+
+updateLists();
 
 const router = createRouter({
   routes: [{
@@ -60,6 +103,11 @@ const router = createRouter({
     path: '/myProjects',
     component: MyProjects,
     name: 'myProjects'
+  },
+  {
+    path: '/newProject',
+    component: CreateNewProject,
+    name: 'newProject'
   },
   {
     path: '/edit',
