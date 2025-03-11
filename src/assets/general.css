@@ -7,19 +7,21 @@
     font-family: Montserrat-Medium;
     src: url('./fonts/Montserrat-Medium.ttf');
 }
+
 @font-face {
     font-family: Montserrat-Regular;
     src: url('./fonts/Montserrat-Regular.ttf');
 }
+
 @font-face {
     font-family: Montserrat-SemiBold;
     src: url('./fonts/Montserrat-SemiBold.ttf');
 }
 
 
- /* colors */
-  :root {
-    --dark-blue:#312E81;
+/* colors */
+:root {
+    --dark-blue: #312E81;
     --light-gray: #64748B;
     --field-color: #F3F4F6;
     --accent: #4F46E5;
@@ -27,9 +29,12 @@
     --default-text-color: #0f172a;
     --cyan-color: #189EA0;
     --selected-color: #E0E7FF;
-  }
+    --footer-color: #222222;
+    --on-footer-color: #979797;
+    --on-footer-accent-color: #cccccc;
+}
 
-.accent{
+.accent {
     color: var(--accent)
 }
 
@@ -38,7 +43,7 @@
 }
 
 .accent-color {
-    color: var(--accent);
+    color: var(--accent);   
 }
 
 .white-color {
@@ -56,6 +61,7 @@
 .light-gray-color {
     color: var(--light-gray);
 }
+
 .default-text-color {
     color: var(--default-text-color);
 }
@@ -64,21 +70,29 @@
     background-color: var(--field-color);
 }
 
+.on-footer-color{
+    color: var(--on-footer-color);
+}
+
+.on-footer-accent-color{
+    color: var(--on-footer-accent-color);
+}
+
 /* fonts */
 * {
-    font-family:  Montserrat, Open Sans, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    font-family: Montserrat, Open Sans, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
     color: var(--default-text-color);
 }
 
-.font-regular{
+.font-regular {
     font-weight: 400;
 }
 
 .font-medium {
-    font-weight: 500!important;
+    font-weight: 500 !important;
 }
 
-.font-light{
+.font-light {
     font-weight: 300;
 }
 
@@ -117,11 +131,11 @@
     width: 100%;
 }
 
-.auth-card-form > * {
+.auth-card-form>* {
     display: block;
 }
 
-.title-auth{
+.title-auth {
     text-align: center;
     margin-bottom: 10%;
 }
@@ -131,10 +145,13 @@
     text-align: center;
 }
 
-.absolute-center{
+.absolute-center {
     margin: auto;
     position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
     align-self: center;
 }
 
@@ -143,7 +160,9 @@
     display: inline;
 }
 
-span.avoidwrap { display:inline-block; }
+span.avoidwrap {
+    display: inline-block;
+}
 
 .main-container {
     display: flex;
@@ -154,18 +173,18 @@ span.avoidwrap { display:inline-block; }
 .container {
     max-width: 1440px;
     margin: 0 auto;
-  }
+}
 
 
-  .header {
+.header {
     border-bottom: 2px solid var(--divider-color);
     flex: 0 1 auto;
 }
 
 .main-content {
     flex: 1 1 auto;
-    
-    max-width: 1440px;
+
+    max-width: 1440px;  
     padding-left: 50px;
     padding-right: 50px;
     margin: 2.25rem auto;
@@ -175,6 +194,7 @@ span.avoidwrap { display:inline-block; }
 .footer {
     width: 100%;
     flex: 0 1 40px;
+    background-color: var(--footer-color);
 }
 
 .center-content {
@@ -183,7 +203,7 @@ span.avoidwrap { display:inline-block; }
     align-items: center;
 }
 
-.column > * {
+.column>* {
     display: block;
 }
 
@@ -203,9 +223,10 @@ span.avoidwrap { display:inline-block; }
         width: 100%;
     }
 }
+
 /* visual */
 
-.elevated{
+.elevated {
     -webkit-border-radius: 1rem;
     -moz-border-radius: 1rem;
     border-radius: 1rem;
@@ -214,7 +235,7 @@ span.avoidwrap { display:inline-block; }
     box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.15);
 }
 
-.rounded-s{
+.rounded-s {
     -webkit-border-radius: .25rem;
     -moz-border-radius: .25rem;
     border-radius: .25rem;
@@ -249,7 +270,7 @@ button {
     visibility: hidden;
 }
 
-.d-none{
+.d-none {
     display: none;
 }
 
@@ -268,7 +289,7 @@ button {
     cursor: pointer;
 }
 
-.edit-menu{
+.edit-menu {
     display: none;
     object-fit: cover;
     position: absolute;
@@ -295,4 +316,8 @@ button {
 label.requered::after {
     content: " *";
     color: var(--accent);
+}
+
+.bottom-border-cyan {
+    border-bottom: 0.1rem solid var(--cyan-color);
 }
