@@ -1,19 +1,39 @@
-import { createApp, ref } from 'vue'
+import { createApp, ref } from 'vue';
 import axios from 'axios';
-import App from './App.vue'
-import { createRouter, createWebHistory } from 'vue-router'
-import './assets/general.css'
-import MainView from './views/Main.vue'
-import AuthView from './views/Auth.vue'
-import SignUpView from './views/SignUp.vue'
-import MyApplicationsView from './views/MyApplications.vue'
+import App from './App.vue';
+import { createRouter, createWebHistory } from 'vue-router';
+import './assets/general.css';
+import MainView from './views/Main.vue';
+import AuthView from './views/Auth.vue';
+import SignUpView from './views/SignUp.vue';
+import MyApplicationsView from './views/MyApplications.vue';
 import ProjectEditView from './views/ProjectEdit.vue'
-import ProjectView from './views/ProjectView.vue'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.min.js'
+import ProjectView from './views/ProjectView.vue';
+import MyProjects from './views/MyProjects.vue';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.min.js';
 // import "https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/cjs/popper.min.js"
 
+const { sendRequest, isLoading, error } = useApi();
 
+export var userRole = ref(-1);
+
+async function updateUserState () {
+  try {
+    const result = sendRequest(
+      'GET',
+      '/users/me'
+    );
+    console.log('Data saved:', result);
+    result.then(function (response) {
+      userRole.value = response.role.id;
+    })
+  } catch {
+      // Обработка ошибки
+  } finally {
+    return true
+  }
+}
 
 const router = createRouter({
   routes: [{
@@ -38,7 +58,7 @@ const router = createRouter({
   },
   {
     path: '/myProjects',
-    component: MyApplicationsView,
+    component: MyProjects,
     name: 'myProjects'
   },
   {
@@ -47,17 +67,23 @@ const router = createRouter({
     name: 'projectEdit'
   },
   {
-    path: '/details',
+    path: '/details/:id',
     component: ProjectView,
     name: 'details'
   }
   ],
   history: createWebHistory()
+});
+
+router.afterEach((to, from) => {
+  if (to.fullPath !== '/auth'){
+      updateUserState();
+  }
 })
 
 
-function useApi () {
-  axios.defaults.baseURL = 'http://localhost:3000/';
+export function useApi () {
+  axios.defaults.baseURL = 'https://spp.gradient.fun:8000/api/';
   axios.defaults.withCredentials = true;
   const isLoading = ref(false);
   const error = ref(null);
@@ -104,8 +130,6 @@ function useApi () {
       error
   };
 };
-
-export default useApi;
 
 const app = createApp(App)
 app.use(router)

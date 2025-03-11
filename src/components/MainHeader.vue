@@ -1,9 +1,9 @@
 <script setup>
     import { useRouter } from 'vue-router';
 
-    defineProps(['userRole'])
+    defineProps(['userRole']);
 
-    const router = useRouter()
+    const router = useRouter();
 
     const navigateToLogin = () => {
         router.push('/auth')
@@ -29,7 +29,6 @@
             <div class="circle gray-background top-logo center-content cursor-pointer">
                 <span class="font-light text-xs" style="color: var(--light-gray);">ИИ</span>
             </div>
-
         </div>
 
         <div v-else @click="navigateToLogin" class="d-flex align-items-center cursor-pointer">

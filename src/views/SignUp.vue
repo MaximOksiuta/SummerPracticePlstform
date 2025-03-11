@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import UAuthField from '../components/UAuthField.vue'
 import AuthLeftInfoBlock from '../components/AuthLeftInfoBlock.vue';
-import useApi from "@/main.js"
+import { useApi } from "@/main.js"
 import { useRouter } from 'vue-router';
 
 const email = ref("");

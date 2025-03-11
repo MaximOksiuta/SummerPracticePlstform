@@ -4,8 +4,7 @@
     import MainHeader from '@/components/MainHeader.vue';
     import MainFooter from '@/components/MainFooter.vue';
     import EditableArgument from '@/components/EditableArgument.vue';
-
-    const authState = ref(false);
+    import { userRole } from '@/main.js';
 
     const roles = ref([
         "Lorem ipsum dolor",
@@ -18,7 +17,7 @@
 
 <template>
     <div class="main-container">
-        <main-header :auth-state="authState" />
+        <main-header :userRole="userRole" />
         <div class="main-content">
             <router-link :to="{ name: 'main' }" class="none-deco font-light text-s cyan-color cursor-pointer">
                 Мои проекты / Название текущего проекта

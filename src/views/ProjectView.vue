@@ -5,9 +5,9 @@ import ProjectCardInfo from '../components/ProjectCardInfo.vue'
 import InfoArgument from '@/components/InfoArgument.vue';
 import MainHeader from '../components/MainHeader.vue';
 import MainFooter from '../components/MainFooter.vue'
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
+import { userRole } from '@/main.js';
 
-const userRole = ref(-1);
 
 const themes = ref([
     "IT",
@@ -16,7 +16,7 @@ const themes = ref([
 ]);
 
 const router = useRouter();
-
+console.log(useRoute().params.id);
 const navigateToEdit = (id) => {
     router.push('/edit')
 };

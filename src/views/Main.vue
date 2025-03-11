@@ -5,8 +5,7 @@
     import MainHeader from '../components/MainHeader.vue';
     import MainFooter from '../components/MainFooter.vue'
     import { useRouter } from 'vue-router';
-
-    const userRole = ref(-1);
+    import { userRole } from '@/main.js';
 
     const themes = ref([
         "IT",
@@ -17,7 +16,12 @@
     const router = useRouter();
 
     const navigateToEdit = (id) => {
-        router.push('/edit')
+        if (userRole === 3){
+            router.push('/edit')
+        } else{
+            router.push({name: 'details', params: {id: 123}})
+        }
+        
     }
 </script>
 
