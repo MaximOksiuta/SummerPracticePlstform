@@ -1,0 +1,298 @@
+@font-face {
+    font-family: Montserrat-Light;
+    src: url('./fonts/Montserrat-Light.ttf');
+}
+
+@font-face {
+    font-family: Montserrat-Medium;
+    src: url('./fonts/Montserrat-Medium.ttf');
+}
+@font-face {
+    font-family: Montserrat-Regular;
+    src: url('./fonts/Montserrat-Regular.ttf');
+}
+@font-face {
+    font-family: Montserrat-SemiBold;
+    src: url('./fonts/Montserrat-SemiBold.ttf');
+}
+
+
+ /* colors */
+  :root {
+    --dark-blue:#312E81;
+    --light-gray: #64748B;
+    --field-color: #F3F4F6;
+    --accent: #4F46E5;
+    --divider-color: #E5E7EB;
+    --default-text-color: #0f172a;
+    --cyan-color: #189EA0;
+    --selected-color: #E0E7FF;
+  }
+
+.accent{
+    color: var(--accent)
+}
+
+.title-color {
+    color: var(--dark-blue);
+}
+
+.accent-color {
+    color: var(--accent);
+}
+
+.white-color {
+    color: white;
+}
+
+.accent-color-background {
+    background-color: var(--accent);
+}
+
+.cyan-color {
+    color: var(--cyan-color);
+}
+
+.light-gray-color {
+    color: var(--light-gray);
+}
+.default-text-color {
+    color: var(--default-text-color);
+}
+
+.gray-background {
+    background-color: var(--field-color);
+}
+
+/* fonts */
+* {
+    font-family:  Montserrat, Open Sans, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    color: var(--default-text-color);
+}
+
+.font-regular{
+    font-weight: 400;
+}
+
+.font-medium {
+    font-weight: 500!important;
+}
+
+.font-light{
+    font-weight: 300;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+}
+
+.text-xxl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+}
+
+.text-m {
+    font-size: 1rem;
+    line-height: 1rem;
+}
+
+.text-s {
+    font-size: .875rem;
+    line-height: 1.25rem;
+}
+
+.text-xs {
+    font-size: .75rem;
+    line-height: 1rem;
+}
+
+/* layout */
+
+.max-width {
+    width: 100%;
+}
+
+.auth-card-form > * {
+    display: block;
+}
+
+.title-auth{
+    text-align: center;
+    margin-bottom: 10%;
+}
+
+
+.center-text {
+    text-align: center;
+}
+
+.absolute-center{
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    align-self: center;
+}
+
+
+.inline {
+    display: inline;
+}
+
+span.avoidwrap { display:inline-block; }
+
+.main-container {
+    display: flex;
+    flex-flow: column;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+
+  .header {
+    border-bottom: 2px solid var(--divider-color);
+    flex: 0 1 auto;
+}
+
+.main-content {
+    flex: 1 1 auto;
+    
+    max-width: 1440px;
+    padding-left: 50px;
+    padding-right: 50px;
+    margin: 2.25rem auto;
+    width: 100%
+}
+
+.footer {
+    width: 100%;
+    flex: 0 1 40px;
+}
+
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.column > * {
+    display: block;
+}
+
+
+.grid-item {
+    width: 32%;
+}
+
+@media (max-width: 1000px) {
+    .grid-item {
+        width: 49%;
+    }
+}
+
+@media (max-width: 800px) {
+    .grid-item {
+        width: 100%;
+    }
+}
+/* visual */
+
+.elevated{
+    -webkit-border-radius: 1rem;
+    -moz-border-radius: 1rem;
+    border-radius: 1rem;
+    -webkitbox-shadow: 0px 0px 18px rgba(0, 0, 0, 0.15);
+    -mozbox-shadow: 0px 0px 18px rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.15);
+}
+
+.rounded-s{
+    -webkit-border-radius: .25rem;
+    -moz-border-radius: .25rem;
+    border-radius: .25rem;
+}
+
+button {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.without-bd {
+    border: none;
+}
+
+.none-deco {
+    text-decoration: none;
+}
+
+.border-r {
+    border-right: 1px solid var(--divider-color);
+}
+
+.hide {
+    visibility: hidden;
+}
+
+.d-none{
+    display: none;
+}
+
+/* features */
+
+/* hover edit */
+.hover-editable:hover {
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+}
+
+.edit-box {
+    cursor: pointer;
+}
+
+.edit-menu{
+    display: none;
+    object-fit: cover;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.edit-button {
+    width: 45px;
+    height: 45px;
+}
+
+.hover-editable:hover+.edit-menu {
+    display: block;
+    cursor: pointer;
+}
+
+.edit-box {
+    overflow: hidden;
+    position: relative;
+}
+
+label.requered::after {
+    content: " *";
+    color: var(--accent);
+}
