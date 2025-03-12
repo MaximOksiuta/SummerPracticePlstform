@@ -18,6 +18,8 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 const { sendRequest, isLoading, error } = useApi();
 
 export const userRole = ref(-1);
+export const userInitials = ref('');
+export const userCompany = ref(-1);
 export const all_categories = ref([]);
 export const all_companies = ref([]);
 export const all_specialities = ref([]);
@@ -31,6 +33,8 @@ async function updateUserState() {
     console.log('Data saved:', result);
     result.then(function (response) {
       userRole.value = response.role.id;
+      userInitials.value = response.firstname[0] + response.lastname[0];
+      userCompany.value = response.company.id;
     })
   } catch {
     console.log(error)
@@ -109,41 +113,46 @@ const router = createRouter({
     path: '/signUp',
     component: SignUpView,
     name: 'signUp',
-    beforeEnter: () => {
-      return false
-    }
+    // beforeEnter: () => {
+    //   return false
+    // }
   },
   {
     path: '/myApplications',
     component: MyApplicationsView,
     name: 'myApplications',
-    beforeEnter: () => {
-      return userRole.value === 1
-    }
+    // beforeEnter: () => {
+    //   updateUserState();
+    //   return userRole.value === 1
+    // }
   },
   {
     path: '/myProjects',
     component: MyProjects,
     name: 'myProjects',
-    beforeEnter: () => {
-      // return userRole.value === 2
-    }
+    // beforeEnter: () => {
+    //   updateUserState();
+    //   return userRole.value === 2
+    // }
   },
   {
     path: '/newProject',
     component: CreateNewProject,
     name: 'newProject',
-    beforeEnter: () => {
-      return userRole.value === 2 || userRole.value === 3
-    }
+    // beforeEnter: () => {
+    //   updateUserState();
+
+    //   return userRole.value === 2 || userRole.value === 3
+    // }
   },
   {
-    path: '/edit',
+    path: '/edit/:id',
     component: ProjectEditView,
     name: 'projectEdit',
-    beforeEnter: () => {
-      return userRole.value === 2 || userRole.value === 3
-    }
+    // beforeEnter: () => {
+    //   updateUserState();
+    //   return userRole.value === 2 || userRole.value === 3
+    // }
   },
   {
     path: '/details/:id',
@@ -168,7 +177,7 @@ export function useApi() {
   const isLoading = ref(false);
   const error = ref(null);
 
-  const sendRequest = async (method, url, data = null, config = {}) => {
+  async function sendRequest (method, url, data = null, config = {}) {
     isLoading.value = true;
     error.value = null;
 

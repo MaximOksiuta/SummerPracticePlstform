@@ -15,16 +15,22 @@ const project_info = ref({});
 async function getProjectDetails(){
     try {
         const result = await sendRequest('GET', `/projects/detail/${useRoute().params.id}`);
-        console.log('Data saved:', result);
+        console.log('Data saved (project view):', result);
 
         project_info.value = {
             project_name: result.name,
             description: result.description,
-            category: "",
+            category: result.category.name,
             company_name: result.company.name,
             specialities: result.specialities.map( (item) => item.name ),
             curator: result.curator,
             images_url: result.images.map((item) => "https://spp.gradient.fun:8000/api/projects/images/" + item)
+        }
+
+        console.log(project_info.value)
+
+        if (project_info.value.images_url.length === 0){
+            project_info.value.images_url = ["https://ik.imagekit.io/vn49p9jmnnv7g/konte/placeholder__yPgLyFqc.jpg"]
         }
     } catch {
         console.log(error)
@@ -43,17 +49,17 @@ getProjectDetails();
                 {{ project_info.project_name }}
             </h1>
 
-            <div id="carouselExample" class="carousel slide mt-5" style="width: 100%; margin-left: auto; margin-right: auto;">
+            <div id="carouselExample" class="carousel slide mt-5 elevated" style="width: 100%; margin-left: auto; margin-right: auto; overflow: hidden;">
                 <div class="carousel-inner">
                     <div class="carousel-indicators d-none">
-                        <button v-for="(image, index) in project_info.image_urls" type="button"
+                        <button v-for="(image, index) in project_info.images_url" type="button"
                             data-bs-target="#carouselExampleIndicators" :data-bs-slide-to="index"
                             v-bind:class="(index === 0) ? 'active' : ''" :aria-current="index === 0"
                             aria-label="Slide {{ index }}"></button>
                     </div>
-                    <div v-for="(image, index) in project_info.image_urls" class="carousel-item"
+                    <div v-for="(image, index) in project_info.images_url" class="carousel-item"
                         v-bind:class="(index === 0) ? 'active' : ''">
-                        <img :src="image" class="d-block w-100">
+                        <img :src="image" class="d-block w-100 ratio-16-9">
                     </div>
 
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"

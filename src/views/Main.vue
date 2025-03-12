@@ -1,5 +1,5 @@
 <script setup>
-    import { ref } from 'vue';
+    import { ref, computed } from 'vue';
     import UDropDown from '../components/UDropDown.vue'
     import ProjectCardInfo from '../components/ProjectCardInfo.vue'
     import MainHeader from '../components/MainHeader.vue';
@@ -17,7 +17,7 @@
 
     const openDetails = (id) => {
         if (userRole === 3){
-            router.push('/edit')
+            router.push({name: 'projectEdit', params: {id: id}})
         } else{
             router.push({name: 'details', params: {id: id}})
         }
@@ -27,6 +27,9 @@
     const selectedCategories = ref([]);
     const selectedCompanies = ref([]);
 
+    const filteredProjects = computed ( () => {
+        return all_projects.value.filter( (item) => (selectedCategories.value.length === 0 || selectedCategories.value.indexOf(item.category_id) !== -1) && (selectedCompanies.value.length === 0 || selectedCompanies.value.indexOf(item.company_id) !== -1))
+    })
 </script>
 
 <template>
@@ -55,7 +58,7 @@
                 </div>
             </div>
             <div style="display: flex; gap: 2%; flex-wrap: wrap; align-content: start;">
-                <project-card-info @click="openDetails(project.id)" v-for="project in all_projects" :projectInfo="project" class="mt-4 grid-item" />
+                <project-card-info @click="openDetails(project.id)" v-for="project in filteredProjects" :key="project.id" :projectInfo="project" class="mt-4 grid-item" />
             </div>
 
         </div>

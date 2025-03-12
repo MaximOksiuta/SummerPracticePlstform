@@ -4,19 +4,19 @@
     import MainHeader from '../components/MainHeader.vue';
     import MainFooter from '../components/MainFooter.vue'
     import { useRouter } from 'vue-router';
-    import { userRole, all_projects } from '@/main.js';
+    import { userRole, all_projects, userCompany } from '@/main.js';
 
     const router = useRouter();
 
     const navigateToEdit = (id) => {
-        router.push('/edit')
+        router.push({name: 'projectEdit', params: {id: id}})
     };
 
     const searchState = ref("");
 
     const filteredProjects = computed ( () => {
         return all_projects.value.filter( (project) => {
-            return (project.name.toLowerCase().indexOf(searchState.value.toLowerCase()) !== -1) || (project.description.toLowerCase().indexOf(searchState.value.toLowerCase()) !== -1)
+            return (project.company_id === userCompany.value) && ((project.name.toLowerCase().indexOf(searchState.value.toLowerCase()) !== -1) || (project.description.toLowerCase().indexOf(searchState.value.toLowerCase()) !== -1))
         });
     });
 

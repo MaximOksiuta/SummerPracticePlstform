@@ -18,7 +18,7 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'apply'])
 const now_edit = ref(props.is_edit);
 const localValues = ref(
     Array.isArray(props.modelValue) 
@@ -101,7 +101,7 @@ const isSelected = (id) => {
 </script>
 
 <template>
-    <div style="position: relative">
+    <div style="position: relative;">
         <div class="mt-3">
             <h5 class="font-semibold text-s mb-1 hello">
                 {{ param_name }}:
@@ -188,7 +188,7 @@ const isSelected = (id) => {
                         </button>
                     </div>
                     <div v-if="!is_edit" class="d-flex justify-content-center max-width mt-3">
-                        <button @click="now_edit = false;" class="btn btn-primary me-2">
+                        <button @click="$emit('apply'); now_edit=false;" class="btn btn-primary me-2">
                             Применить
                         </button>
                         <button @click="addNewItem" class="btn btn-outline-secondary ms-2">
@@ -216,7 +216,7 @@ const isSelected = (id) => {
                     </select>
                     <button 
                         v-if="!is_edit" 
-                        @click="now_edit = false;" 
+                        @click="$emit('apply'); now_edit=false;"
                         class="btn btn-outline-secondary" 
                     >
                         Применить
@@ -244,7 +244,7 @@ const isSelected = (id) => {
                         >
                         <button 
                             v-if="!is_edit" 
-                            @click="now_edit = false;" 
+                            @click="$emit('apply'); now_edit=false;"
                             class="btn btn-outline-secondary" 
                         >
                             Применить
@@ -269,7 +269,7 @@ const isSelected = (id) => {
                             </button>
                         </div>
                         <div class="d-flex justify-content-center max-width mt-3">
-                            <button @click="now_edit = false;" class="btn btn-primary me-2">
+                            <button @click="$emit('apply'); now_edit=false;" class="btn btn-primary me-2">
                                 Применить
                             </button>
                             <button @click="addNewItem" class="btn btn-outline-secondary ms-2">

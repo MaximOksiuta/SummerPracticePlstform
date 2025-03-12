@@ -7,10 +7,13 @@
 });
 
     const project_info = ref({
-        image_url: (props.projectInfo.images.lenght > 0) ? props.projectInfo.images[0] : "https://ik.imagekit.io/vn49p9jmnnv7g/konte/placeholder__yPgLyFqc.jpg",
+        image_url: (props.projectInfo.images.length > 0) ? "https://spp.gradient.fun:8000/api/projects/images/" + props.projectInfo.images[0] : "https://ik.imagekit.io/vn49p9jmnnv7g/konte/placeholder__yPgLyFqc.jpg",
         project_name: props.projectInfo.name,
         description: props.projectInfo.description
     });
+
+
+    console.log('project card info', props.projectInfo);
 </script>
 
 <template>

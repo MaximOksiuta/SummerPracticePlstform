@@ -4,14 +4,16 @@
     import MainHeader from '@/components/MainHeader.vue';
     import MainFooter from '@/components/MainFooter.vue';
     import EditableArgument from '@/components/EditableArgument.vue';
-    import { userRole } from '@/main.js';
+    import { userRole, useApi, all_categories, all_companies, all_specialities } from '@/main.js';
+    import { useRoute } from 'vue-router';
 
+    const id = ref(useRoute().params.id);
     const name = ref("");
-    const category = ref("");
+    const category = ref(-1);
 
     const description = ref("");
 
-    const partner = ref("");
+    const partner = ref(-1);
 
     const author = ref("");
 
@@ -20,9 +22,96 @@
     const curator = ref("");
 
     var roles = ref([
-        ""
+        -1
     ]);
 
+    var images = ref([
+
+    ])
+
+    const { sendRequest, isLoading, error } = useApi();
+
+    async function getProjectDetails(){
+        try {
+            console.log('getProjectDetails');
+            const result = await sendRequest('GET', `/projects/detail/${id.value}`);
+            console.log('getProjectDetails finish');
+
+            console.log('Data saved:', result);
+            name.value = result.name
+            category.value = result.category.id
+            description.value = result.description
+            partner.value = result.company.id
+            author.value = result.author
+            contact.value = result.contact
+            curator.value = result.curator
+            roles.value = result.specialities.map((item) => item.id)
+            images.value = result.images.map((item) => "https://spp.gradient.fun:8000/api/projects/images/" + item)
+            
+            id.value = result.id
+        } catch (error) {
+            console.log(error)
+        }
+    };
+
+    const fileInput = ref(null);
+    const selectedFile = ref(null);
+
+    const uploadFile = async () => {
+        if (!selectedFile.value) return;
+
+        const formData = new FormData();
+        formData.append('images', selectedFile.value);
+
+        try {
+            const response = await sendRequest('POST',`/projects/images/upload/${id.value}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+            });
+            
+            console.log('Файл успешно загружен:', response.data);
+            getProjectDetails();
+            selectedFile.value = null;
+        } catch (error) {
+            console.error('Ошибка загрузки файла:', error);
+        }
+    };
+
+    const handleFileSelect = (event) => {
+        const files = event.target.files;
+        if (files?.length) {
+            selectedFile.value = files[0];
+        }
+        uploadFile();
+    };
+
+    const triggerFileInput = () => {
+    fileInput.value.click();
+    };
+
+    async function patchProject(data) {
+        try {
+            const result = await sendRequest('PATCH',`/projects/update/${id.value}`, data);
+            console.log('Data saved (patch):', result);
+            getProjectDetails();
+
+            // name.value = result.name
+            // category.value = result.category_id
+            // description.value = result.description
+            // partner.value = result.company_id
+            // author.value = result.author
+            // contact.value = result.contact
+            // curator.value = result.curator
+            // roles.value = result.specialities.map((item) => item.id)
+            
+            // id.value = result.id
+        } catch {
+            console.log(error)
+        }
+    }
+
+    getProjectDetails();
     
 </script>
 
@@ -30,8 +119,8 @@
     <div class="main-container">
         <main-header :userRole="userRole" />
         <div class="main-content">
-            <router-link :to="{ name: 'main' }" class="none-deco font-light text-s cyan-color cursor-pointer">
-                Мои проекты / Название текущего проекта
+            <router-link :to="{ name: 'myProjects' }" class="none-deco font-light text-s cyan-color cursor-pointer">
+                Мои проекты / {{name}}
             </router-link>
 
             <h3 class="font-semibold text-xl mt-5 accent-color">
@@ -40,24 +129,20 @@
 
             <div class="two-columns">
                 <div class="column">
-
-                    <editable-argument param_name="Название" v-model="name" />
-
-                    <editable-argument param_name="Категория" v-model="category" />
-
-                    <editable-argument large="true" param_name="Описание" v-model="description" />
+                    <editable-argument @apply="patchProject({name: name})" param_name="Название" v-model="name" />
+                    <editable-argument @apply="patchProject({category_id: Number(category)})" param_name="Категория" v-model="category" is-dropdown
+                        :options="all_categories" />
+                    <editable-argument @apply="patchProject({description: description})" large param_name="Описание" v-model="description" />
                 </div>
 
                 <div class="column">
-                    <editable-argument param_name="Партнер" param_value="" v-model="partner" />
+                    <editable-argument @apply="patchProject({company_id: Number(partner)})" param_name="Партнер" v-model="partner" is-dropdown
+                        :options="all_companies" />
+                    <editable-argument @apply="patchProject({author: author})" param_name="Автор" v-model="author" />
+                    <editable-argument @apply="patchProject({contact: contact})" param_name="Контактное лицо" v-model="contact" />
+                    <editable-argument @apply="patchProject({curator: curator})" param_name="Куратор" v-model="curator" />
+                    <editable-argument @apply="patchProject({specialities: roles.map((item) => Number(item))})" param_name="Необходимые роли" v-model="roles" is-dropdown multi-instance :options="all_specialities"/>
 
-                    <editable-argument param_name="Автор" param_value="" v-model="author"/>
-
-                    <editable-argument param_name="Контактное лицо" param_value="" v-model="contact"/>
-
-                    <editable-argument param_name="Куратор" param_value="" v-model="curator"/>
-
-                    <editable-argument param_name="Необходимые роли" v-model="roles"/>
                 </div>
             </div>
 
@@ -65,21 +150,34 @@
                 Изображения
             </h3>
 
-            <div style="display: flex; gap: 2%; flex-wrap: wrap; align-content: start;">
-                <div class="edit-box" v-for="theme in [1, 2, 3, 4, 5, 6, 7, 8]">
-                    <div class="hover-editable">
-                        <img src="https://yastatic.net/naydex/yandex-search/pEx1Z9458/yfc3cb8J/9LlQulD8ASm2V6QkLsXYvhcDzv-Mdv2Vl4fqiTBNnrbFqHxPw3OU386nGKsTLPCPeEwzp8JwL2HY8GptlBqu-HE9JT4kOHU4A5LwRVuFWI5HIhsrvWc4NdJWTqz17M6TZVj8KUX0k134IM68kU5HW-1N14bUA-"
+            <div style="display: flex; gap: 2%; flex-wrap: wrap; align-content: start;" class="">
+                <!-- <div class="edit-box" v-for="theme in [1, 2, 3, 4, 5, 6, 7, 8]"> -->
+                    <!-- <div class="hover-editable"> -->
+                        <img v-for="image in images" :src="image"
                             class="mt-4 grid-item elevated" />
-                    </div>
-                    <div class="edit-menu center cursor-pointer">
+                            <div @click="triggerFileInput" class="mt-4 grid-item elevated">
+                                <div class="d-flex max-width max-height justify-content-center align-items-center">
+                                    <img src="../assets/plus-icon.svg" style="height: 50%; margin: auto auto; display: block;">
+                                
+                                </div>
+                            </div>
+                            <input
+                                type="file"
+                                ref="fileInput"
+                                accept=".jpg,.jpeg,.png"
+                                @change="handleFileSelect"
+                                style="display: none"
+                            />
+                    <!-- </div> -->
+                    <!-- <div class="edit-menu center cursor-pointer">
                         <div class="d-flex ">
                             <img class="edit-button me-5 " src="../assets/expand-icon.svg">
                             <img class="edit-button ms-5" src="../assets/trash-icon.svg">
                         </div>
                         
-                    </div>
+                    </div> -->
                     
-                </div>
+                <!-- </div> -->
 
             </div>
         </div>

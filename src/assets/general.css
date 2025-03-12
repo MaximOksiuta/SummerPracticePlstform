@@ -131,6 +131,10 @@
     width: 100%;
 }
 
+.max-height {
+    height: 100%;
+}
+
 .auth-card-form>* {
     display: block;
 }

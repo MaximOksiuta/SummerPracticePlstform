@@ -4,7 +4,12 @@ import { ref } from 'vue'
 import MainHeader from '@/components/MainHeader.vue';
 import MainFooter from '@/components/MainFooter.vue';
 import EditableArgument from '@/components/EditableArgument.vue';
+import { useRouter } from 'vue-router';
 import { userRole, useApi, all_categories, all_companies, all_specialities } from '@/main.js';
+
+const { sendRequest, isLoading, error } = useApi();
+const router = useRouter();
+
 
 const name = ref("");
 const category = ref(-1);
@@ -23,12 +28,39 @@ var roles = ref([
     -1
 ]);
 
+const navigateToEdit = (id) => {
+        router.push({name: 'projectEdit', params: {id: id}})
+    };
+
+async function createProject() {
+  try {
+    const result = await sendRequest(
+      'POST',
+      '/projects/create',
+      {
+        name: name.value,
+        description: description.value,
+        author: author.value,
+        contact: contact.value,
+        curator: curator.value,
+        company_id: Number(partner.value),
+        category_id: Number(category.value),
+        specialities: roles.value.map((item) => Number(item))
+      }
+    );
+    console.log('Data saved:', result);
+    navigateToEdit(result.id);
+  } catch {
+    console.log(error)
+  }
+}
+
 </script>
 
 <template>
     <div class="main-container">
         <main-header :userRole="userRole" />
-        <div class="main-content align-items-center">
+        <div class="main-content align-items-center" style="max-width: 800px;">
             <h2 class="font-semibold text-xxl mt-3 accent-color text-center">
                 Создание проекта
             </h2>
@@ -76,7 +108,7 @@ var roles = ref([
                 </div>
             </div>
 
-            <button @click="" class="btn btn-primary max-width mt-5">Создать проект</button>
+            <button @click="createProject" class="btn btn-primary max-width mt-5">Создать проект</button>
         </div>
         <main-footer />
     </div>
