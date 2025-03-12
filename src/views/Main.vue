@@ -16,7 +16,7 @@
     const router = useRouter();
 
     const openDetails = (id) => {
-        if (userRole === 3){
+        if (userRole.value === 3){
             router.push({name: 'projectEdit', params: {id: id}})
         } else{
             router.push({name: 'details', params: {id: id}})
