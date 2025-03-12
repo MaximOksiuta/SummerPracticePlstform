@@ -5,41 +5,40 @@ import ProjectCardInfo from '../components/ProjectCardInfo.vue'
 import InfoArgument from '@/components/InfoArgument.vue';
 import MainHeader from '../components/MainHeader.vue';
 import MainFooter from '../components/MainFooter.vue'
-import { useRouter, useRoute } from 'vue-router';
-import { userRole } from '@/main.js';
+import { useRoute } from 'vue-router';
+import { userRole, useApi } from '@/main.js';
 
+const { sendRequest, isLoading, error } = useApi();
 
-const themes = ref([
-    "IT",
-    "Biology",
-    "Chemistry"
-]);
+const project_info = ref({});
 
-const router = useRouter();
-console.log(useRoute().params.id);
-const navigateToEdit = (id) => {
-    router.push('/edit')
+async function getProjectDetails(){
+    try {
+        const result = await sendRequest('GET', `/projects/detail/${useRoute().params.id}`);
+        console.log('Data saved:', result);
+
+        project_info.value = {
+            project_name: result.name,
+            description: result.description,
+            category: "",
+            company_name: result.company.name,
+            specialities: result.specialities.map( (item) => item.name ),
+            curator: result.curator,
+            images_url: result.images.map((item) => "https://spp.gradient.fun:8000/api/projects/images/" + item)
+        }
+    } catch {
+        console.log(error)
+    }
 };
+getProjectDetails();
 
-const project_info = ref({
-    project_name: "Крутое название",
-    image_urls: ["https://yastatic.net/naydex/yandex-search/pEx1Z9458/yfc3cb8J/9LlQulD8ASm2V6QkLsXYvhcDzv-Mdv2Vl4fqiTBNnrbFqHxPw3OU386nGKsTLPCPeEwzp8JwL2HY8GptlBqu-HE9JT4kOHU4A5LwRVuFWI5HIhsrvWc4NdJWTqz17M6TZVj8KUX0k134IM68kU5HW-1N14bUA-", "https://yastatic.net/naydex/yandex-search/pEx1Z9458/yfc3cb8J/9LlQulD8ASm2V6QkLsXYvhcDzv-Mdv2Vl4fqiTBNnrbFqHxPw3OU386nGKsTLPCPeEwzp8JwL2HY8GptlBqu-HE9JT4kOHU4A5LwRVuFWI5HIhsrvWc4NdJWTqz17M6TZVj8KUX0k134IM68kU5HW-1N14bUA-", "https://yastatic.net/naydex/yandex-search/pEx1Z9458/yfc3cb8J/9LlQulD8ASm2V6QkLsXYvhcDzv-Mdv2Vl4fqiTBNnrbFqHxPw3OU386nGKsTLPCPeEwzp8JwL2HY8GptlBqu-HE9JT4kOHU4A5LwRVuFWI5HIhsrvWc4NdJWTqz17M6TZVj8KUX0k134IM68kU5HW-1N14bUA-"],
-    category: "Engeeniring",
-    company_name: "Яндекс",
-    description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                deserunt mollit anim id est laborum.`,
-    specialities: ['Frontend developer', 'Backend developer', 'ML engenier', 'Dev-Ops'],
-    curator: "Старый лях"
-});
+
 </script>
 
 <template>
     <div class="main-container">
         <main-header :userRole="userRole" />
-        <div class="main-content d-flex-column align-items-center max-width">
+        <div v-if="!isLoading" class="main-content d-flex-column align-items-center max-width">
             <h1 class="center-text title-color font-medium">
                 {{ project_info.project_name }}
             </h1>
@@ -74,7 +73,7 @@ const project_info = ref({
                 <div class="column align-items-center">
                     <info-argument param_name="Компания партнер" :param_value="project_info.company_name"/>
                     
-                    <info-argument param_name="Описание" :param_value="project_info.description"/>
+                    <info-argument param_name="Описание" :param_value="project_info.description" text_justify/>
                 </div>
 
                 <div class="column">

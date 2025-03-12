@@ -19,7 +19,7 @@
         if (userRole === 3){
             router.push('/edit')
         } else{
-            router.push({name: 'details', params: {id: 123}})
+            router.push({name: 'details', params: {id: id}})
         }
         
     }
@@ -55,7 +55,7 @@
                 </div>
             </div>
             <div style="display: flex; gap: 2%; flex-wrap: wrap; align-content: start;">
-                <project-card-info @click="openDetails(0)" v-for="project in all_projects" :projectInfo="project" class="mt-4 grid-item" />
+                <project-card-info @click="openDetails(project.id)" v-for="project in all_projects" :projectInfo="project" class="mt-4 grid-item" />
             </div>
 
         </div>

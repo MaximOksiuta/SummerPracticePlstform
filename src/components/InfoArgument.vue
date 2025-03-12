@@ -1,8 +1,11 @@
 <script setup>
     import { ref } from 'vue';
 
-    defineProps(['param_name', 'param_value']);
-    const now_edit = ref(false);
+    defineProps({
+        param_name: String,
+        param_value: String,
+        text_justify: Boolean
+    });
 </script>
 
 <template>
@@ -12,7 +15,7 @@
                 {{ param_name }}:
             </h5>
             <div class="column" style="min-height: 45px;">
-                <p v-if="param_value !== none && !(param_value instanceof Array)" class="light-gray text-xxl font-light">
+                <p v-if="param_value !== none && !(param_value instanceof Array)" class="light-gray text-xxl font-light text-justify" :v-bind:class="((text_justify) ? 'text-justify': '')">
                     {{ param_value }}
                 </p>
                 <p>

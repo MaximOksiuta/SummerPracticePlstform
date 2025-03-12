@@ -326,3 +326,7 @@ label.requered::after {
     aspect-ratio: 16/9;
     object-fit:cover;
 }
+
+.text-justify {
+    text-align: justify;
+}
