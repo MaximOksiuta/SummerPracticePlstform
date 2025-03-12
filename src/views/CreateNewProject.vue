@@ -16,7 +16,7 @@ const category = ref(-1);
 
 const description = ref("");
 
-const partner = ref((userRole.value === 2 && userCompany.value) ? userCompany.value : -1);
+const partner = ref(-1);
 
 const author = ref("");
 
@@ -34,6 +34,9 @@ const navigateToEdit = (id) => {
 
 async function createProject() {
   try {
+    if (partner.value === -1){
+        partner.value = userCompany.value;
+    }
     const result = await sendRequest(
       'POST',
       '/projects/create',
@@ -76,7 +79,7 @@ async function createProject() {
 
             <editable-argument is_edit large param_name="Описание" v-model="description" />
 
-            <editable-argument :is_edit="!(userRole === 2 && partner !== -1)" :onlyRead="userRole === 2 && partner !== -1" param_name="Партнер" v-model="partner" is-dropdown
+            <editable-argument v-if="!userCompany" is_edit param_name="Партнер" v-model="partner" is-dropdown
                 :options="all_companies" />
 
             <editable-argument is_edit param_name="Автор" v-model="author" />
