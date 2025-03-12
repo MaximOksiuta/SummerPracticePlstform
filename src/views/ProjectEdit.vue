@@ -95,17 +95,6 @@
             const result = await sendRequest('PATCH',`/projects/update/${id.value}`, data);
             console.log('Data saved (patch):', result);
             getProjectDetails();
-
-            // name.value = result.name
-            // category.value = result.category_id
-            // description.value = result.description
-            // partner.value = result.company_id
-            // author.value = result.author
-            // contact.value = result.contact
-            // curator.value = result.curator
-            // roles.value = result.specialities.map((item) => item.id)
-            
-            // id.value = result.id
         } catch {
             console.log(error)
         }
@@ -136,7 +125,7 @@
                 </div>
 
                 <div class="column">
-                    <editable-argument @apply="patchProject({company_id: Number(partner)})" :readOnly="userRole === 2" param_name="Партнер" v-model="partner" is-dropdown
+                    <editable-argument @apply="patchProject({company_id: Number(partner)})" :onlyRead="userRole === 2" param_name="Партнер" v-model="partner" is-dropdown
                         :options="all_companies" />
                     <editable-argument @apply="patchProject({author: author})" param_name="Автор" v-model="author" />
                     <editable-argument @apply="patchProject({contact: contact})" param_name="Контактное лицо" v-model="contact" />
