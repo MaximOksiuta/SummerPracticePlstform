@@ -56,6 +56,7 @@ const selectedLabels = computed(() => {
     return props.options.find(opt => opt.id === props.modelValue)?.name || 'Не выбрано'
 })
 
+// Watchers
 watch(() => props.is_edit, (newVal) => {
     if (!props.onlyRead) now_edit.value = newVal
 })
@@ -70,13 +71,14 @@ watch(() => props.modelValue, (newValues) => {
         : newValues
 }, { deep: true, immediate: true })
 
+// Methods
 const enableEdit = () => {
     if (!props.onlyRead) now_edit.value = true
 }
 
 const applyChanges = () => {
     emit('apply')
-    if (!props.onlyRead) now_edit.value = false
+    if (!props.is_edit && !props.onlyRead) now_edit.value = false
 }
 
 const updateField = (index, value) => {
@@ -180,6 +182,7 @@ const isSelected = (id) => {
             </div>
 
             <div v-else-if="!onlyRead">
+                <!-- Multi-instance Dropdown -->
                 <div v-if="isDropdown && multiInstance">
                     <div v-for="(item, index) in localValues" 
                          :key="index" 
@@ -201,7 +204,7 @@ const isSelected = (id) => {
                             <img src="../assets/delete-icon.svg">
                         </button>
                     </div>
-                    <div class="d-flex justify-content-center max-width mt-3">
+                    <div v-if="!is_edit" class="d-flex justify-content-center max-width mt-3">
                         <button @click="applyChanges" 
                                 class="btn btn-primary me-2">
                             Применить
@@ -213,6 +216,7 @@ const isSelected = (id) => {
                     </div>
                 </div>
 
+                <!-- Single Dropdown -->
                 <div v-else-if="isDropdown" class="input-group">
                     <select class="form-select"
                             :multiple="multiple"
@@ -225,12 +229,14 @@ const isSelected = (id) => {
                             {{ option.name }}
                         </option>
                     </select>
-                    <button @click="applyChanges" 
+                    <button v-if="!is_edit" 
+                            @click="applyChanges" 
                             class="btn btn-outline-secondary">
                         Применить
                     </button>
                 </div>
 
+                <!-- Text Inputs -->
                 <template v-else>
                     <div v-if="!Array.isArray(modelValue)" class="input-group">
                         <textarea v-if="large" 
@@ -245,12 +251,14 @@ const isSelected = (id) => {
                                class="form-control" 
                                :value="modelValue"
                                @input="$emit('update:modelValue', $event.target.value)">
-                        <button @click="applyChanges" 
+                        <button v-if="!is_edit" 
+                                @click="applyChanges" 
                                 class="btn btn-outline-secondary">
                             Применить
                         </button>
                     </div>
 
+                    <!-- Multiple Text Inputs -->
                     <div v-else>
                         <div v-for="(param, index) in localValues" 
                              :key="index" 
@@ -266,7 +274,7 @@ const isSelected = (id) => {
                                 <img src="../assets/delete-icon.svg">
                             </button>
                         </div>
-                        <div class="d-flex justify-content-center max-width mt-3">
+                        <div v-if="!is_edit" class="d-flex justify-content-center max-width mt-3">
                             <button @click="applyChanges" 
                                     class="btn btn-primary me-2">
                                 Применить
@@ -309,5 +317,13 @@ const isSelected = (id) => {
 .max-width {
     max-width: 500px;
     margin: 0 auto;
+}
+
+.input-group {
+    gap: 0.5rem;
+}
+
+.btn-outline-secondary {
+    border-color: #dee2e6;
 }
 </style>
