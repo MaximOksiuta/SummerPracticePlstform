@@ -76,7 +76,7 @@ async function createProject() {
 
             <editable-argument is_edit large param_name="Описание" v-model="description" />
 
-            <editable-argument is_edit :onlyRead="userRole === 2 && userCompany" param_name="Партнер" v-model="partner" is-dropdown
+            <editable-argument :is_edit="!(userRole === 2 && partner !== -1)" :onlyRead="userRole === 2 && partner !== -1" param_name="Партнер" v-model="partner" is-dropdown
                 :options="all_companies" />
 
             <editable-argument is_edit param_name="Автор" v-model="author" />
