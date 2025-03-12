@@ -136,7 +136,7 @@
                 </div>
 
                 <div class="column">
-                    <editable-argument @apply="patchProject({company_id: Number(partner)})" param_name="Партнер" v-model="partner" is-dropdown
+                    <editable-argument @apply="patchProject({company_id: Number(partner)})" :readOnly="userRole === 2" param_name="Партнер" v-model="partner" is-dropdown
                         :options="all_companies" />
                     <editable-argument @apply="patchProject({author: author})" param_name="Автор" v-model="author" />
                     <editable-argument @apply="patchProject({contact: contact})" param_name="Контактное лицо" v-model="contact" />

@@ -5,7 +5,7 @@ import MainHeader from '@/components/MainHeader.vue';
 import MainFooter from '@/components/MainFooter.vue';
 import EditableArgument from '@/components/EditableArgument.vue';
 import { useRouter } from 'vue-router';
-import { userRole, useApi, all_categories, all_companies, all_specialities } from '@/main.js';
+import { userRole, useApi, all_categories, all_companies, all_specialities, userCompany } from '@/main.js';
 
 const { sendRequest, isLoading, error } = useApi();
 const router = useRouter();
@@ -16,7 +16,7 @@ const category = ref(-1);
 
 const description = ref("");
 
-const partner = ref(-1);
+const partner = ref((userRole.value === 2 && userCompany.value) ? userCompany.value : -1);
 
 const author = ref("");
 
@@ -76,7 +76,7 @@ async function createProject() {
 
             <editable-argument is_edit large param_name="Описание" v-model="description" />
 
-            <editable-argument is_edit param_name="Партнер" v-model="partner" is-dropdown
+            <editable-argument is_edit :onlyRead="userRole === 2 && userCompany" param_name="Партнер" v-model="partner" is-dropdown
                 :options="all_companies" />
 
             <editable-argument is_edit param_name="Автор" v-model="author" />
