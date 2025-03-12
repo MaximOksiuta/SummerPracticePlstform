@@ -5,7 +5,7 @@
     import MainHeader from '../components/MainHeader.vue';
     import MainFooter from '../components/MainFooter.vue'
     import { useRouter } from 'vue-router';
-    import { userRole } from '@/main.js';
+    import { userRole, all_projects, all_categories, all_companies } from '@/main.js';
 
     const themes = ref([
         "IT",
@@ -15,7 +15,7 @@
 
     const router = useRouter();
 
-    const navigateToEdit = (id) => {
+    const openDetails = (id) => {
         if (userRole === 3){
             router.push('/edit')
         } else{
@@ -23,6 +23,10 @@
         }
         
     }
+
+    const selectedCategories = ref([]);
+    const selectedCompanies = ref([]);
+
 </script>
 
 <template>
@@ -32,13 +36,12 @@
             <div class="d-flex justify-content-start max-width align-items-center">
                 <h4 class="font-regular m-0">Фильтры поиска: </h4>
                 <div class="d-flex justify-content-start align-items-center flex-wrap">
-                    <u-drop-down buttonText="Сфера проекта" commonButtonText="Все сферы" :listargs=themes></u-drop-down>
-                    <u-drop-down buttonText="Компания партнер" commonButtonText="Все компании"
-                        :listargs=themes></u-drop-down>
-                    <u-drop-down class="d-none" buttonText="Сложность" commonButtonText="Любая сложность"
+                    <u-drop-down v-model="selectedCategories" buttonText="Сфера проекта" commonButtonText="Все сферы" :listargs="all_categories"></u-drop-down>
+                    <u-drop-down v-model="selectedCompanies" buttonText="Компания партнер" commonButtonText="Все компании" :listargs="all_companies"></u-drop-down>
+                    <!-- <u-drop-down class="d-none" buttonText="Сложность" commonButtonText="Любая сложность"
                         :listargs=themes></u-drop-down>
                     <u-drop-down class="d-none"  buttonText="Статус проекта" commonButtonText="Любой статус"
-                        :listargs=themes></u-drop-down>
+                        :listargs=themes></u-drop-down> -->
 
                     <div class="form-check d-none">
                         <label class="d-flex align-items-center">
@@ -52,7 +55,7 @@
                 </div>
             </div>
             <div style="display: flex; gap: 2%; flex-wrap: wrap; align-content: start;">
-                <project-card-info @click="navigateToEdit(0)" v-for="theme in themes" class="mt-4 grid-item" />
+                <project-card-info @click="openDetails(0)" v-for="project in all_projects" :projectInfo="project" class="mt-4 grid-item" />
             </div>
 
         </div>

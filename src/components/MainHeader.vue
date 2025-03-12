@@ -25,7 +25,7 @@
 
         <div v-if="userRole !== -1" class="d-flex align-items-center">
             <img class="header-icon me-3 cursor-pointer" src="../assets/notifications.svg">
-            <img v-if="userRole === 1" class="header-icon me-3 cursor-pointer" src="../assets/favorite.svg">
+            <img v-if="userRole === 1" class="header-icon me-3 cursor-pointer d-none" src="../assets/favorite.svg">
             <div class="circle gray-background top-logo center-content cursor-pointer">
                 <span class="font-light text-xs" style="color: var(--light-gray);">ИИ</span>
             </div>

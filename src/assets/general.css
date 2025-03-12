@@ -321,3 +321,8 @@ label.requered::after {
 .bottom-border-cyan {
     border-bottom: 0.1rem solid var(--cyan-color);
 }
+
+.ratio-16-9 {
+    aspect-ratio: 16/9;
+    object-fit:cover;
+}

@@ -21,7 +21,8 @@ export const userRole = ref(-1);
 export const all_categories = ref([]);
 export const all_companies = ref([]);
 export const all_specialities = ref([]);
-async function updateUserState () {
+export const all_projects = ref([]);
+async function updateUserState() {
   try {
     const result = sendRequest(
       'GET',
@@ -32,7 +33,7 @@ async function updateUserState () {
       userRole.value = response.role.id;
     })
   } catch {
-      console.log(error)
+    console.log(error)
   } finally {
     return true
   }
@@ -40,43 +41,58 @@ async function updateUserState () {
 
 async function updateLists() {
   try {
-      const result = await sendRequest(
-          'GET',
-          '/projects/categories'
-      );
-      console.log('Data saved:', result);
-      
-      all_categories.value = [...result];
+    const result = await sendRequest(
+      'GET',
+      '/projects/categories'
+    );
+    console.log('Data saved:', result);
+
+    all_categories.value = [...result];
   } catch {
-      console.log(error)
+    console.log(error)
   }
 
   try {
     const result = await sendRequest(
-        'GET',
-        '/projects/specialities'
+      'GET',
+      '/projects/specialities'
     );
     console.log('Data saved:', result);
-    
+
     all_specialities.value = [...result];
   } catch {
-      result
+    console.log(error)
   }
 
   try {
     const result = await sendRequest(
-        'GET',
-        '/projects/companies'
+      'GET',
+      '/projects/companies'
     );
     console.log('Data saved:', result);
-    
+
     all_companies.value = [...result];
-} catch {
-    result
-}
+  } catch {
+    console.log(error)
+  }
 };
 
+async function updateProjectsList() {
+  try {
+    const result = await sendRequest(
+      'GET',
+      '/projects/'
+    );
+    console.log('Data saved:', result);
+
+    all_projects.value = [...result];
+  } catch {
+    console.log(error)
+  }
+}
+
 updateLists();
+
 
 const router = createRouter({
   routes: [{
@@ -92,27 +108,42 @@ const router = createRouter({
   {
     path: '/signUp',
     component: SignUpView,
-    name: 'signUp'
+    name: 'signUp',
+    beforeEnter: () => {
+      return false
+    }
   },
   {
     path: '/myApplications',
     component: MyApplicationsView,
-    name: 'myApplications'
+    name: 'myApplications',
+    beforeEnter: () => {
+      return userRole.value === 1
+    }
   },
   {
     path: '/myProjects',
     component: MyProjects,
-    name: 'myProjects'
+    name: 'myProjects',
+    beforeEnter: () => {
+      // return userRole.value === 2
+    }
   },
   {
     path: '/newProject',
     component: CreateNewProject,
-    name: 'newProject'
+    name: 'newProject',
+    beforeEnter: () => {
+      return userRole.value === 2 || userRole.value === 3
+    }
   },
   {
     path: '/edit',
     component: ProjectEditView,
-    name: 'projectEdit'
+    name: 'projectEdit',
+    beforeEnter: () => {
+      return userRole.value === 2 || userRole.value === 3
+    }
   },
   {
     path: '/details/:id',
@@ -124,58 +155,59 @@ const router = createRouter({
 });
 
 router.afterEach((to, from) => {
-  if (to.fullPath !== '/auth'){
-      updateUserState();
+  if (to.fullPath !== '/auth') {
+    updateUserState();
+    updateProjectsList();
   }
 })
 
 
-export function useApi () {
+export function useApi() {
   axios.defaults.baseURL = 'https://spp.gradient.fun:8000/api/';
   axios.defaults.withCredentials = true;
   const isLoading = ref(false);
   const error = ref(null);
 
   const sendRequest = async (method, url, data = null, config = {}) => {
-      isLoading.value = true;
-      error.value = null;
+    isLoading.value = true;
+    error.value = null;
 
-      try {
-          const response = await axios({
-              method: method.toLowerCase(),
-              url,
-              data,
-              ...config
-          });
-          return response.data;
-      } catch (err) {
-          handleError(err);
-          throw err; // Пробрасываем ошибку для обработки в компоненте
-      } finally {
-          isLoading.value = false;
-      }
+    try {
+      const response = await axios({
+        method: method.toLowerCase(),
+        url,
+        data,
+        ...config
+      });
+      return response.data;
+    } catch (err) {
+      handleError(err);
+      throw err; // Пробрасываем ошибку для обработки в компоненте
+    } finally {
+      isLoading.value = false;
+    }
   };
 
   const handleError = (err) => {
-      if (err.response) {
-          // Сервер ответил с статусом ошибки
-          error.value = err.response.data.message || 'Server Error';
-          console.error('Server Error:', err.response.data);
-      } else if (err.request) {
-          // Запрос был отправлен, но ответ не получен
-          error.value = 'Network Error';
-          console.error('Network Error:', err.request);
-      } else {
-          // Ошибка при настройке запроса
-          error.value = 'Request Error';
-          console.error('Request Error:', err.message);
-      }
+    if (err.response) {
+      // Сервер ответил с статусом ошибки
+      error.value = err.response.data.message || 'Server Error';
+      console.error('Server Error:', err.response.data);
+    } else if (err.request) {
+      // Запрос был отправлен, но ответ не получен
+      error.value = 'Network Error';
+      console.error('Network Error:', err.request);
+    } else {
+      // Ошибка при настройке запроса
+      error.value = 'Request Error';
+      console.error('Request Error:', err.message);
+    }
   };
 
   return {
-      sendRequest,
-      isLoading,
-      error
+    sendRequest,
+    isLoading,
+    error
   };
 };
 
